@@ -484,23 +484,26 @@ We welcome contributions to improve the University Advising System!
 3. Address feedback and make changes
 4. Final approval and merge
 
-## 📄 License
+## 🛡️ License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the [MIT License](LICENSE).
 
-## 🆘 Support
+---
 
+<<<<<<< HEAD
 ### Getting Help
 - **Documentation**: Check this README and inline code comments
 - **Database**: Review `SqlQuery_1.sql` for schema and procedures
 - **Issues**: Report bugs and request features via GitHub Issues
 - **Discussions**: Use GitHub Discussions for questions and ideas
+=======
+## 🙌 Author
+>>>>>>> 1aca902293e1271b5e5d078ef0c295bdf7bc02a1
 
-### Contact Information
-- **Email**: [support@university-advising.com](mailto:support@university-advising.com)
-- **GitHub**: [Project Issues](https://github.com/your-org/university-advising/issues)
-- **Documentation**: [Wiki](https://github.com/your-org/university-advising/wiki)
+**Momen H.**  
+📂 [GitHub Profile »](https://github.com/Momenh2)
 
+<<<<<<< HEAD
 ### Troubleshooting
 
 #### Common Issues
@@ -535,6 +538,8 @@ Solution: Ensure SqlQuery_1.sql has been executed completely
 - Optimize page load times
 - Cache frequently accessed data
 - Use database views for complex joins
+=======
+>>>>>>> 1aca902293e1271b5e5d078ef0c295bdf7bc02a1
 
 ## 📈 Roadmap
 
@@ -556,4 +561,8 @@ Solution: Ensure SqlQuery_1.sql has been executed completely
 
 ---
 
+<<<<<<< HEAD
 **Note**: This system is designed for educational institutions and should be deployed in a secure environment with proper access controls and data protection measures in place. The comprehensive database schema with stored procedures ensures data integrity and efficient business logic implementation. 
+=======
+**Note**: This system is designed for educational institutions and should be deployed in a secure environment with proper access controls and data protection measures in place. 
+>>>>>>> 1aca902293e1271b5e5d078ef0c295bdf7bc02a1
