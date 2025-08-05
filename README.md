@@ -490,56 +490,10 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-<<<<<<< HEAD
-### Getting Help
-- **Documentation**: Check this README and inline code comments
-- **Database**: Review `SqlQuery_1.sql` for schema and procedures
-- **Issues**: Report bugs and request features via GitHub Issues
-- **Discussions**: Use GitHub Discussions for questions and ideas
-=======
 ## 🙌 Author
->>>>>>> 1aca902293e1271b5e5d078ef0c295bdf7bc02a1
-
 **Momen H.**  
 📂 [GitHub Profile »](https://github.com/Momenh2)
 
-<<<<<<< HEAD
-### Troubleshooting
-
-#### Common Issues
-
-**Database Connection Error**
-```
-Error: Cannot connect to database
-Solution: Verify SQL Server LocalDB is running and connection string is correct
-```
-
-**Build Errors**
-```
-Error: Missing NuGet packages
-Solution: Restore NuGet packages in Visual Studio
-```
-
-**Runtime Errors**
-```
-Error: Session timeout
-Solution: Check session configuration in Web.config
-```
-
-**Stored Procedure Errors**
-```
-Error: Procedure not found
-Solution: Ensure SqlQuery_1.sql has been executed completely
-```
-
-### Performance Optimization
-- Use stored procedures for complex queries
-- Implement proper indexing on database tables
-- Optimize page load times
-- Cache frequently accessed data
-- Use database views for complex joins
-=======
->>>>>>> 1aca902293e1271b5e5d078ef0c295bdf7bc02a1
 
 ## 📈 Roadmap
 
@@ -561,8 +515,3 @@ Solution: Ensure SqlQuery_1.sql has been executed completely
 
 ---
 
-<<<<<<< HEAD
-**Note**: This system is designed for educational institutions and should be deployed in a secure environment with proper access controls and data protection measures in place. The comprehensive database schema with stored procedures ensures data integrity and efficient business logic implementation. 
-=======
-**Note**: This system is designed for educational institutions and should be deployed in a secure environment with proper access controls and data protection measures in place. 
->>>>>>> 1aca902293e1271b5e5d078ef0c295bdf7bc02a1
