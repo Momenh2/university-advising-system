@@ -7,12 +7,13 @@ A comprehensive web-based academic management system designed for universities t
 - [Overview](#overview)
 - [Features](#features)
 - [Technology Stack](#technology-stack)
+- [Database Schema](#database-schema)
+- [Stored Procedures & Functions](#stored-procedures--functions)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
 - [User Roles](#user-roles)
-- [Database Schema](#database-schema)
 - [API Documentation](#api-documentation)
 - [Development](#development)
 - [Testing](#testing)
@@ -32,40 +33,48 @@ The University Advising System is a comprehensive academic management platform t
 - **Comprehensive Reporting**: Detailed academic records and transcript management
 - **Financial Integration**: Payment tracking and installment management
 - **Real-time Updates**: Dynamic course availability and registration status
+- **Advanced Database Design**: Comprehensive schema with stored procedures and functions
 
 ## ✨ Features
 
 ### Student Features
-- 🔐 Secure login and registration
-- 📚 View available courses and course details
-- 📝 Request course registrations
-- ⏰ Request extra credit hours
+- 🔐 Secure login and registration with financial status validation
+- 📚 View available courses and course details for current semester
+- 📝 Request course registrations with prerequisite validation
+- ⏰ Request extra credit hours (up to 3 hours with GPA < 3.7)
 - 📋 View and track graduation plans
 - 📊 Access academic transcripts
-- 💳 View payment status and installments
+- 💳 View payment status and upcoming installments
 - 🔍 Search and filter course offerings
+- 📝 Register for makeup exams (first and second attempts)
+- 👨‍🏫 Choose instructors for selected courses
+- 📋 View required and optional courses based on academic standing
 
 ### Advisor Features
-- 👥 Manage assigned students
-- 📋 Create and modify graduation plans
+- 👥 Manage assigned students by major
+- 📋 Create and modify graduation plans (for students with ≥157 hours)
 - 📝 Insert courses into graduation plans
 - 📅 Update graduation dates
 - ❌ Delete courses from plans
 - 📊 View student transcripts
-- ✅ Approve/reject student requests
+- ✅ Approve/reject student requests (course and credit hour requests)
 - 📋 Manage pending requests
 - 📈 Track student progress
+- 🎯 View students with their current courses
 
 ### Administrator Features
 - 🗑️ Delete courses and course slots
 - 📝 Add makeup exams
 - 💰 Manage payments and installments
-- 📊 Update student financial status
+- 📊 Update student financial status based on payment history
 - 👥 View all active students
 - 📋 View all graduation plans
 - 📊 Generate comprehensive reports
 - 🎓 Manage semesters and course offerings
 - 🔗 Link students with advisors
+- 📚 Add new courses and semesters
+- 👨‍🏫 Link instructors to courses and slots
+- 💳 Issue installments for payments
 
 ## 🛠️ Technology Stack
 
@@ -84,12 +93,119 @@ The University Advising System is a comprehensive academic management platform t
 ### Database
 - **SQL Server LocalDB** - Database engine
 - **Stored Procedures** - Database operations
-- **Entity Framework** - ORM (if applicable)
+- **User-Defined Functions** - Complex business logic
+- **Views** - Optimized data retrieval
 
 ### Development Tools
 - **Visual Studio** - IDE
 - **IIS Express** - Local web server
 - **NuGet** - Package management
+
+## 🗄️ Database Schema
+
+### Core Tables
+
+#### **Student Management**
+- **Student**: Student information, GPA, financial status, advisor assignment
+- **Student_Phone**: Multiple phone numbers per student
+- **Advisor**: Advisor profiles and contact information
+
+#### **Academic Structure**
+- **Course**: Course catalog with prerequisites and credit hours
+- **PreqCourse_course**: Prerequisite relationships between courses
+- **Semester**: Academic periods with start/end dates
+- **Course_Semester**: Course offerings per semester
+
+#### **Academic Records**
+- **Student_Instructor_Course_take**: Student course enrollments and grades
+- **Instructor**: Faculty information
+- **Instructor_Course**: Instructor-course assignments
+- **Slot**: Course time slots and locations
+
+#### **Graduation Planning**
+- **Graduation_Plan**: Student graduation plans
+- **GradPlan_Course**: Courses included in graduation plans
+
+#### **Requests & Approvals**
+- **Request**: Student requests (course, credit hours) with approval status
+- **MakeUp_Exam**: Makeup exam scheduling
+- **Exam_Student**: Student makeup exam registrations
+
+#### **Financial Management**
+- **Payment**: Student payment records
+- **Installment**: Payment installment tracking
+
+### Key Relationships
+- Students are assigned to Advisors (1:1)
+- Courses have prerequisites (Many:Many via PreqCourse_course)
+- Students enroll in courses through Student_Instructor_Course_take
+- Graduation plans link students, advisors, and courses
+- Payments are associated with students and semesters
+
+### Database Views
+- **view_Students**: Active students with accepted financial status
+- **view_Course_prerequisites**: Courses with their prerequisites
+- **Instructors_AssignedCourses**: All instructors with assigned courses
+- **Student_Payment**: Payments with student details
+- **Courses_Slots_Instructor**: Course slots with instructor information
+- **Courses_MakeupExams**: Courses with makeup exam details
+- **Students_Courses_transcript**: Student academic transcripts
+- **Semster_offered_Courses**: Semester course offerings
+- **Advisors_Graduation_Plan**: Graduation plans with advisor information
+
+## 🔧 Stored Procedures & Functions
+
+### Authentication & Registration
+- **Procedures_StudentRegistration**: Student registration with output ID
+- **Procedures_AdvisorRegistration**: Advisor registration
+- **FN_StudentLogin**: Student login with financial status check
+- **FN_AdvisorLogin**: Advisor login validation
+
+### Administrator Functions
+- **Procedures_AdminListStudents**: List all students
+- **Procedures_AdminListAdvisors**: List all advisors
+- **AdminListStudentsWithAdvisors**: Students with advisor assignments
+- **AdminAddingSemester**: Add new academic semesters
+- **Procedures_AdminAddingCourse**: Add new courses
+- **Procedures_AdminLinkInstructor**: Link instructors to course slots
+- **Procedures_AdminLinkStudent**: Link students to courses
+- **Procedures_AdminLinkStudentToAdvisor**: Assign students to advisors
+- **Procedures_AdminAddExam**: Add makeup exams
+- **Procedures_AdminIssueInstallment**: Generate payment installments
+- **Procedures_AdminDeleteCourse**: Delete courses and related slots
+- **FN_AdminCheckStudentStatus**: Check student financial status
+- **Procedure_AdminUpdateStudentStatus**: Update student financial status
+- **Procedures_AdminDeleteSlots**: Delete slots for non-offered courses
+
+### Advisor Functions
+- **Procedures_AdvisorCreateGP**: Create graduation plans (≥157 hours required)
+- **Procedures_AdvisorAddCourseGP**: Add courses to graduation plans
+- **Procedures_AdvisorUpdateGP**: Update graduation dates
+- **Procedures_AdvisorDeleteFromGP**: Remove courses from graduation plans
+- **FN_Advisors_Requests**: Get advisor's pending requests
+- **Procedures_AdvisorApproveRejectCHRequest**: Approve/reject credit hour requests
+- **Procedures_AdvisorViewAssignedStudents**: View assigned students by major
+- **FN_check_prerequiste**: Check course prerequisites
+- **Procedures_AdvisorApproveRejectCourseRequest**: Approve/reject course requests
+- **Procedures_AdvisorViewPendingRequests**: View pending requests
+
+### Student Functions
+- **Procedures_StudentaddMobile**: Add phone numbers
+- **FN_SemsterAvailableCourses**: View available courses for semester
+- **Procedures_StudentSendingCourseRequest**: Submit course requests
+- **Procedures_StudentSendingCHRequest**: Submit credit hour requests
+- **FN_StudentViewGP**: View graduation plan details
+- **FN_StudentUpcoming_installment**: View next payment deadline
+- **FN_StudentViewSlot**: View course slots with instructor details
+- **Procedures_StudentRegisterFirstMakeup**: Register for first makeup exam
+- **FN_StudentCheckSMEligibility**: Check second makeup eligibility
+- **Procedures_StudentRegisterSecondMakeup**: Register for second makeup exam
+- **FN_StudentFailedAndNotEligibleCourse**: Failed courses not eligible for makeup
+- **FN_StudentUnattendedCourses**: Courses not yet taken
+- **Procedures_ViewRequiredCourses**: View required courses
+- **Procedures_ViewOptionalCourse**: View optional courses
+- **Procedures_ViewMS**: View missing/remaining courses
+- **Procedures_Chooseinstructor**: Choose instructor for course
 
 ## 📋 Prerequisites
 
@@ -115,17 +231,31 @@ git clone <repository-url>
 cd DB1
 ```
 
-### Step 2: Open in Visual Studio
+### Step 2: Database Setup
+1. Open SQL Server Management Studio or Visual Studio
+2. Connect to your SQL Server instance
+3. Execute the `SqlQuery_1.sql` file to create the database and all objects
+4. The script will create:
+   - Database: `Advising_System`
+   - All tables, views, stored procedures, and functions
+   - Sample data (if included)
+
+### Step 3: Open in Visual Studio
 1. Open Visual Studio
 2. Open the solution file: `WebApplication1/WebApplication1.sln`
 3. Wait for Visual Studio to restore NuGet packages
 
-### Step 3: Database Setup
-1. Ensure SQL Server LocalDB is running
-2. The application will automatically create the database on first run
-3. Alternatively, you can run the database scripts manually
+### Step 4: Configure Database Connection
+1. Open `Web.config`
+2. Verify the connection string points to your database:
+```xml
+<connectionStrings>
+    <add name="Advising_System"
+         connectionString="server=(localdb)\MSSQLLocalDB;Initial Catalog=Advising_System;Integrated Security=True" />
+</connectionStrings>
+```
 
-### Step 4: Build and Run
+### Step 5: Build and Run
 1. Press `F5` or click "Start Debugging"
 2. The application will open in your default browser
 3. Navigate to the application URL (typically `https://localhost:44392`)
@@ -168,25 +298,30 @@ Key configuration options in `Web.config`:
 ### Common Workflows
 
 #### Student Workflow
-1. Register/Login as a student
-2. View available courses
-3. Request course registration
-4. Track graduation plan progress
-5. View academic transcript
+1. Register/Login as a student (financial status must be active)
+2. View available courses for current semester
+3. Request course registration (prerequisites checked automatically)
+4. Request extra credit hours (if eligible)
+5. View graduation plan and track progress
+6. Register for makeup exams if needed
+7. View academic transcript and payment status
 
 #### Advisor Workflow
 1. Login as an advisor
-2. View assigned students
-3. Create/modify graduation plans
+2. View assigned students by major
+3. Create/modify graduation plans (for eligible students)
 4. Approve/reject student requests
-5. Monitor student progress
+5. Monitor student progress and academic standing
+6. Manage course assignments in graduation plans
 
 #### Administrator Workflow
 1. Login as administrator
-2. Manage courses and slots
-3. Handle payments and installments
-4. Generate reports
-5. Manage system settings
+2. Manage courses, semesters, and instructors
+3. Link students with advisors
+4. Handle payments and installments
+5. Update student financial status
+6. Generate comprehensive reports
+7. Manage makeup exams and course offerings
 
 ## 👥 User Roles
 
@@ -194,34 +329,19 @@ Key configuration options in `Web.config`:
 - **Purpose**: Academic planning and course management
 - **Permissions**: View courses, request registrations, access transcripts
 - **Access Level**: Limited to personal academic information
+- **Financial Requirements**: Must have active financial status to login
 
 ### Advisor Role
 - **Purpose**: Student advising and academic planning
 - **Permissions**: Manage graduation plans, approve requests, view student data
 - **Access Level**: Access to assigned students' information
+- **Graduation Plan Requirements**: Students must have ≥157 acquired hours
 
 ### Administrator Role
 - **Purpose**: System administration and management
 - **Permissions**: Full system access, course management, financial operations
 - **Access Level**: Complete system access
-
-## 🗄️ Database Schema
-
-The system uses a comprehensive database schema with the following key entities:
-
-### Core Tables
-- **Students**: Student information and academic records
-- **Advisors**: Advisor profiles and assignments
-- **Courses**: Course catalog and offerings
-- **Graduation_Plans**: Academic planning data
-- **Requests**: Student requests and approvals
-- **Payments**: Financial transaction records
-
-### Relationships
-- Students are assigned to Advisors
-- Courses are linked to Graduation Plans
-- Requests connect Students to Advisors
-- Payments are associated with Students
+- **Financial Management**: Can update student status based on payment history
 
 ## 🔌 API Documentation
 
@@ -234,16 +354,21 @@ The system uses a comprehensive database schema with the following key entities:
 - `GET /courses.aspx` - View available courses
 - `POST /course_request.aspx` - Submit course requests
 - `GET /transcript.aspx` - View academic transcript
+- `POST /credit_hour_request.aspx` - Submit credit hour requests
+- `GET /graduation_plan.aspx` - View graduation plan
+- `POST /makeup_exam.aspx` - Register for makeup exams
 
 ### Advisor Endpoints
 - `GET /advisor.aspx` - Advisor dashboard
 - `POST /graduation_plan.aspx` - Manage graduation plans
 - `GET /pending_requests.aspx` - View pending requests
+- `POST /approve_request.aspx` - Approve/reject requests
 
 ### Administrator Endpoints
 - `GET /Admin2.aspx` - Admin dashboard
 - `POST /course_management.aspx` - Course operations
 - `GET /reports.aspx` - Generate reports
+- `POST /payment_management.aspx` - Payment operations
 
 ## 💻 Development
 
@@ -258,6 +383,7 @@ WebApplication1/
 │   ├── packages.config     # NuGet packages
 │   └── Properties/         # Assembly info
 ├── packages/               # NuGet packages
+├── SqlQuery_1.sql         # Database schema and procedures
 └── WebApplication1.sln     # Solution file
 ```
 
@@ -267,37 +393,42 @@ WebApplication1/
 - **advisor.aspx**: Advisor dashboard
 - **Admin2.aspx**: Administrator dashboard
 - **Web.config**: Application configuration
+- **SqlQuery_1.sql**: Complete database schema and business logic
 
 ### Development Guidelines
 1. **Code Style**: Follow C# coding conventions
 2. **Naming**: Use descriptive names for controls and variables
 3. **Error Handling**: Implement proper exception handling
 4. **Security**: Validate all user inputs
-5. **Performance**: Optimize database queries
+5. **Performance**: Use stored procedures for database operations
+6. **Database**: Follow the established schema and procedure patterns
 
 ## 🧪 Testing
 
 ### Unit Testing
-- Test individual components and methods
+- Test individual stored procedures and functions
 - Mock database connections for isolated testing
 - Verify business logic correctness
+- Test authentication and authorization
 
 ### Integration Testing
 - Test complete user workflows
-- Verify database operations
+- Verify database operations and constraints
 - Test role-based access control
+- Validate financial status checks
 
 ### User Acceptance Testing
-- Test with actual users
+- Test with actual users from each role
 - Verify all features work as expected
-- Validate user experience
+- Validate user experience and workflows
+- Test edge cases and error scenarios
 
 ## 🚀 Deployment
 
 ### Development Deployment
 1. Build the solution in Visual Studio
 2. Run locally using IIS Express
-3. Test all functionality
+3. Test all functionality with sample data
 
 ### Production Deployment
 1. **Prerequisites**:
@@ -321,6 +452,7 @@ WebApplication1/
    - Configure IIS application pool
    - Set up SSL certificates
    - Configure security settings
+   - Ensure proper database permissions
 
 ### Environment Variables
 - `DATABASE_CONNECTION` - Production database connection
@@ -344,6 +476,7 @@ We welcome contributions to improve the University Advising System!
 - Test your changes thoroughly
 - Update documentation as needed
 - Ensure all tests pass
+- Follow database schema conventions
 
 ### Code Review Process
 1. Submit pull request with detailed description
@@ -359,6 +492,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### Getting Help
 - **Documentation**: Check this README and inline code comments
+- **Database**: Review `SqlQuery_1.sql` for schema and procedures
 - **Issues**: Report bugs and request features via GitHub Issues
 - **Discussions**: Use GitHub Discussions for questions and ideas
 
@@ -389,11 +523,18 @@ Error: Session timeout
 Solution: Check session configuration in Web.config
 ```
 
+**Stored Procedure Errors**
+```
+Error: Procedure not found
+Solution: Ensure SqlQuery_1.sql has been executed completely
+```
+
 ### Performance Optimization
 - Use stored procedures for complex queries
 - Implement proper indexing on database tables
 - Optimize page load times
 - Cache frequently accessed data
+- Use database views for complex joins
 
 ## 📈 Roadmap
 
@@ -403,12 +544,16 @@ Solution: Check session configuration in Web.config
 - [ ] Advanced reporting dashboard
 - [ ] API for third-party integrations
 - [ ] Enhanced security features
+- [ ] Email notifications for requests
+- [ ] Calendar integration for course schedules
+- [ ] Advanced analytics and reporting
 
 ### Version History
 - **v1.0.0** - Initial release with core functionality
 - **v1.1.0** - Enhanced user interface
 - **v1.2.0** - Improved performance and security
+- **v1.3.0** - Complete database schema and stored procedures
 
 ---
 
-**Note**: This system is designed for educational institutions and should be deployed in a secure environment with proper access controls and data protection measures in place. 
+**Note**: This system is designed for educational institutions and should be deployed in a secure environment with proper access controls and data protection measures in place. The comprehensive database schema with stored procedures ensures data integrity and efficient business logic implementation. 
