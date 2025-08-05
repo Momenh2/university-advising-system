@@ -351,49 +351,17 @@ We welcome contributions to improve the University Advising System!
 3. Address feedback and make changes
 4. Final approval and merge
 
-## 📄 License
+## 🛡️ License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the [MIT License](LICENSE).
 
-## 🆘 Support
+---
 
-### Getting Help
-- **Documentation**: Check this README and inline code comments
-- **Issues**: Report bugs and request features via GitHub Issues
-- **Discussions**: Use GitHub Discussions for questions and ideas
+## 🙌 Author
 
-### Contact Information
-- **Email**: [support@university-advising.com](mailto:support@university-advising.com)
-- **GitHub**: [Project Issues](https://github.com/your-org/university-advising/issues)
-- **Documentation**: [Wiki](https://github.com/your-org/university-advising/wiki)
+**Momen H.**  
+📂 [GitHub Profile »](https://github.com/Momenh2)
 
-### Troubleshooting
-
-#### Common Issues
-
-**Database Connection Error**
-```
-Error: Cannot connect to database
-Solution: Verify SQL Server LocalDB is running and connection string is correct
-```
-
-**Build Errors**
-```
-Error: Missing NuGet packages
-Solution: Restore NuGet packages in Visual Studio
-```
-
-**Runtime Errors**
-```
-Error: Session timeout
-Solution: Check session configuration in Web.config
-```
-
-### Performance Optimization
-- Use stored procedures for complex queries
-- Implement proper indexing on database tables
-- Optimize page load times
-- Cache frequently accessed data
 
 ## 📈 Roadmap
 
